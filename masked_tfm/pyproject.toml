@@ -1,0 +1,26 @@
+[project]
+name = "masked-tfm"
+version = "0.1.0"
+description = "Masked tabular foundation model exploration"
+readme = "README.md"
+requires-python = ">=3.12, <3.13" 
+dependencies = [
+    "torch",
+    "torchvision",
+    "torchaudio",
+]
+
+[dependency-groups]
+dev = [
+  "ruff>=0.6.0",
+]
+
+[tool.uv.sources]
+torch = { index = "pytorch-cpu" }
+torchvision = { index = "pytorch-cpu" }
+torchaudio = { index = "pytorch-cpu" }
+
+[[tool.uv.index]]
+name = "pytorch-cpu"
+url = "https://download.pytorch.org/whl/cpu"
+explicit = true
