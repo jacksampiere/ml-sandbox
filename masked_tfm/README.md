@@ -14,7 +14,7 @@ This folder explores building a small masked tabular foundation model from first
   A low-level prototype that defines a `MaskedTFM` module and custom `masked_loss` function and trains directly on sampled synthetic batches.
 
 - `train_torch.py`  
-   End-to-end PyTorch training pipeline that wraps the same core model/loss from  with a dataset, dataLoader, train/val/test splits, feature standardization, and epoch-based optimization.
+   End-to-end PyTorch training pipeline that wraps the same core model/loss from `train_masked_tfm.py` with a dataset, dataloader, train/val/test splits, feature standardization, and epoch-based optimization.
 
 ## Running the code
 Install uv:
@@ -31,5 +31,8 @@ source .venv/bin/activate
 
 Running the scripts:
 ```shell
-python <script_name>
+python forward.py  # run first to generate data for attention implementation
+python attention.py
+python train_masked_tfm.py
+python train_torch.py  # saves model artifact
 ```

@@ -12,7 +12,7 @@ class TFMDataset(Dataset):
         self.X_cat = X_cat
 
         if self.X_num.shape[0] != self.X_cat.shape[0]:
-            raise ValueError("Mismatch between number of numeric and cateogrical rows")
+            raise ValueError("Mismatch between number of numeric and categorical rows")
 
     def __len__(self):
         return self.X_num.shape[0]

@@ -1,4 +1,10 @@
+# Envs
 **/.venv/
 **/uv.lock
+
+# Caches
 **/.ruff_cache
 **/__pycache__
+
+# Model/data artifacts
+*.pt

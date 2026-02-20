@@ -56,7 +56,7 @@ X_num_mean = X_num.mean(dim=0, keepdim=True)
 X_num_std = X_num.std(dim=0, keepdim=True, unbiased=False)
 X_num = (X_num - X_num_mean) / X_num_std
 # Create uniform distribution for each category
-# Scale by number of available categories; integer truncate to cast to class
+# Scale by number of available categories; truncate to integer class indices
 X_cat = (torch.rand(B, P_cat) * cat_cardinalities).long()
 
 print(f"Raw data has shape: {torch.cat([X_num, X_cat], axis=1).shape}")
@@ -107,7 +107,7 @@ X_emb = torch.cat(
     [X_emb_num, X_emb_cat_1.unsqueeze(1), X_emb_cat_2.unsqueeze(1)], dim=1
 )
 # Define these for later based on how we created and concatenated the data above
-age_idx, height_idx, weight_idx = 0, 1, 2
+age_idx, weight_idx, height_idx = 0, 1, 2
 sex_idx, hand_idx = 3, 4
 
 # Column embeddings: (P, d) broadcasted to (B, P, d)
@@ -164,7 +164,7 @@ print()
 # 4) Transformer encoder forward
 # =========================
 # - Feed X_masked into TransformerEncoder
-# - Be mindful of expected shape: many PyTorch modules want (P, B, d), so you may transpose
+# - Be mindful of expected shape: many PyTorch modules want (B, P, D), so you may transpose
 #
 # Output:
 # - H: (B, P, d) final hidden states per token
@@ -194,24 +194,24 @@ b_age = torch.randn(1)  # scalar bias
 yhat_age = torch.matmul(H[:, age_idx, ...], W_age) + b_age
 
 # Rather than doing this for each feature separately, reconcile into a single matrix:
-W_height = torch.randn(D)  # weight vector
-b_height = torch.randn(1)  # scalar bias
 W_weight = torch.randn(D)  # weight vector
 b_weight = torch.randn(1)  # scalar bias
+W_height = torch.randn(D)  # weight vector
+b_height = torch.randn(1)  # scalar bias
 # Data
 H_num = H[:, :P_num, ...]
 # Full weight matrix
-W_num = torch.stack([W_age, W_height, W_weight])
+W_num = torch.stack([W_age, W_weight, W_height])
 # Full bias vector
-b_num = torch.stack([b_age, b_height, b_weight]).squeeze(-1)
+b_num = torch.stack([b_age, b_weight, b_height]).squeeze(-1)
 H_num = H[:, :P_num, ...]
-W_num = torch.stack([W_age, W_height, W_weight])
-b_num = torch.stack([b_age, b_height, b_weight]).squeeze(-1)
+W_num = torch.stack([W_age, W_weight, W_height])
+b_num = torch.stack([b_age, b_weight, b_height]).squeeze(-1)
 yhat_num = (H_num * W_num).sum(dim=-1) + b_num  # broadcast dot products
 # Check equality of standalone vs. matrix version of linear head forward pass
 yhat_weight = torch.matmul(H[:, weight_idx, ...], W_weight) + b_weight
 yhat_height = torch.matmul(H[:, height_idx, ...], W_height) + b_height
-yhat_num_expected = torch.stack([yhat_age, yhat_height, yhat_weight], axis=1)
+yhat_num_expected = torch.stack([yhat_age, yhat_weight, yhat_height], axis=1)
 assert torch.allclose(yhat_num, yhat_num_expected, atol=1e-4)
 
 # Categorical columns:
@@ -274,7 +274,7 @@ y_sex = X_cat[:, 0, ...]  # sex is at index 0 when constructing `X_cat`
 logits_sex_masked = logits_sex[mask_sex]
 y_sex_masked = y_sex[mask_sex]
 # We used a 2-logit head --> CE instead of BCE
-L_sex = cross_entropy(logits_sex_masked, y_sex_masked)
+L_sex = cross_entropy(logits_sex_masked, y_sex_masked)  # empty mask guard omitted per seed
 print(f"Number of masked categorical elements (sex): {mask_sex.sum()}")
 print(f"Number of elements for CE loss calculation (sex): {y_sex_masked.shape[0]}")
 print(f"CE loss (sex): {L_sex:.4f}")
@@ -285,7 +285,7 @@ mask_hand = mask[:, hand_idx, ...].squeeze(-1).to(torch.bool)
 y_hand = X_cat[:, 1, ...]
 logits_hand_masked = logits_hand[mask_hand]
 y_hand_masked = y_hand[mask_hand]
-L_hand = cross_entropy(logits_hand_masked, y_hand_masked)
+L_hand = cross_entropy(logits_hand_masked, y_hand_masked)  # empty mask guard omitted per seed
 print(f"Number of masked categorical elements (handedness): {mask_hand.sum()}")
 print(
     f"Number of elements for CE loss calculation (handedness): {y_hand_masked.shape[0]}"

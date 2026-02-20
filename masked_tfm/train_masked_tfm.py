@@ -16,8 +16,6 @@ from torch.nn import TransformerEncoderLayer, TransformerEncoder
 from torch.nn.functional import cross_entropy
 from torch.optim import Adam
 
-torch.manual_seed(42)
-
 
 def sample_batch(B, P_num, P_cat, cat_cardinalities, device):
     """Function to sample a batch of size B per training step."""
@@ -99,7 +97,7 @@ class MaskedTFM(nn.Module):
         :param D: Embedding dimension
         :param P_num: Number of numeric features
         :param P_cat: Number of categorical features
-        :param cat_cardinalities: List of number of categories of per categorical feature
+        :param cat_cardinalities: List of number of categories per categorical feature
         :param p_mask: probability of feature masking
         """
         super().__init__()
@@ -210,6 +208,9 @@ def run_training(
 
 
 if __name__ == "__main__":
+
+    torch.manual_seed(42)
+
     # Configs
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     batch_size = 32
