@@ -16,6 +16,9 @@ This folder explores building a small masked tabular foundation model from first
 - `train_torch.py`  
    End-to-end PyTorch training pipeline that wraps the same core model/loss from `train_masked_tfm.py` with a dataset, dataloader, train/val/test splits, feature standardization, and epoch-based optimization.
 
+- `train_lightning.py`
+  End-to-end PyTorch Lightning implementation of `train_torch.py`.
+
 ## Running the code
 Install uv:
 ```shell
@@ -35,4 +38,5 @@ python forward.py  # run first to generate data for attention implementation
 python attention.py
 python train_masked_tfm.py
 python train_torch.py  # saves model artifact
+python train_lightning.py  # saves model artifact
 ```
