@@ -208,11 +208,10 @@ def run_training(
 
 
 if __name__ == "__main__":
-
     torch.manual_seed(42)
+    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
     # Configs
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     batch_size = 32
     embedding_dim = 6
     P_num = 3  # number of numeric features

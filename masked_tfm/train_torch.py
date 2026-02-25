@@ -1,6 +1,5 @@
 import torch
-from torch.utils.data import Dataset, DataLoader
-from torch.utils.data import random_split
+from torch.utils.data import Dataset, DataLoader, random_split
 
 from train_masked_tfm import MaskedTFM, masked_loss
 

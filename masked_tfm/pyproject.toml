@@ -5,9 +5,9 @@ description = "Masked tabular foundation model exploration"
 readme = "README.md"
 requires-python = ">=3.12, <3.13" 
 dependencies = [
-    "torch",
-    "torchvision",
-    "torchaudio",
+    "torch==2.10.0",
+    "numpy==2.4.2",
+    "lightning==2.6.1"
 ]
 
 [dependency-groups]
@@ -17,8 +17,6 @@ dev = [
 
 [tool.uv.sources]
 torch = { index = "pytorch-cpu" }
-torchvision = { index = "pytorch-cpu" }
-torchaudio = { index = "pytorch-cpu" }
 
 [[tool.uv.index]]
 name = "pytorch-cpu"

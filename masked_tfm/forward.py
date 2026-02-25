@@ -274,7 +274,9 @@ y_sex = X_cat[:, 0, ...]  # sex is at index 0 when constructing `X_cat`
 logits_sex_masked = logits_sex[mask_sex]
 y_sex_masked = y_sex[mask_sex]
 # We used a 2-logit head --> CE instead of BCE
-L_sex = cross_entropy(logits_sex_masked, y_sex_masked)  # empty mask guard omitted per seed
+L_sex = cross_entropy(
+    logits_sex_masked, y_sex_masked
+)  # empty mask guard omitted per seed
 print(f"Number of masked categorical elements (sex): {mask_sex.sum()}")
 print(f"Number of elements for CE loss calculation (sex): {y_sex_masked.shape[0]}")
 print(f"CE loss (sex): {L_sex:.4f}")
@@ -285,7 +287,9 @@ mask_hand = mask[:, hand_idx, ...].squeeze(-1).to(torch.bool)
 y_hand = X_cat[:, 1, ...]
 logits_hand_masked = logits_hand[mask_hand]
 y_hand_masked = y_hand[mask_hand]
-L_hand = cross_entropy(logits_hand_masked, y_hand_masked)  # empty mask guard omitted per seed
+L_hand = cross_entropy(
+    logits_hand_masked, y_hand_masked
+)  # empty mask guard omitted per seed
 print(f"Number of masked categorical elements (handedness): {mask_hand.sum()}")
 print(
     f"Number of elements for CE loss calculation (handedness): {y_hand_masked.shape[0]}"

@@ -8,3 +8,4 @@
 
 # Model/data artifacts
 *.pt
+**/lightning_logs/**
